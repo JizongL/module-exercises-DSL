@@ -1,7 +1,7 @@
 'use strict';
 
 const store = (function(){
-  const foo = 'bar';
+ 
     const items= [
       { id: cuid(), name: 'apples', checked: false },
       { id: cuid(), name: 'oranges', checked: false },
@@ -21,4 +21,3 @@ const store = (function(){
 }());
 
 console.log(store);
-console.log(foo);

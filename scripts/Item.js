@@ -1,11 +1,23 @@
 'use strict';
-const item = (function(){
-  const foo = 'foo';
+
+
+const Item = (function(){
+  
   const Item = {};
+  function validateName(name){
+    if(!name){
+      throw 'Name does not exist';
+    }
+  }
+  function create(name){
+    return {id:cuid(),name:name, checked:false};
+  }
   return{
-    Item:Item
+    Item:Item,
+    validateName:validateName,
+    create:create
+
   };
 }());
 
-console.log(item);
-console.log(foo);
+console.log(Item);
