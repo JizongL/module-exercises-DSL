@@ -18,14 +18,11 @@ const store = (function(){
     }
 
     function addItem(name){
-      try{
-        Item.validateName(name);
-        console.log('this is a test',items);
-        this.items.push(Item.create(name));
+        
+       // console.log('this is a test',items);
+        this.items.push(name);
       }
-      catch(error){
-        console.log(error);
-      }}
+      
       
    function findAndToggleChecked(id){
       const foundItem =  this.findById(id);
