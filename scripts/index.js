@@ -12,21 +12,37 @@ $(document).ready(function() {
 });
 
 api.getItems()
-  .then(res => res.json())
+  .then(res => {
+    
+    const item = store.items[0];
+    console.log('current name: ' + item.name);
+    store.findAndUpdate(item.id, { name: 'foobar' });
+    console.log('new name: ' + item.name);
+    // because there is additional terms inside this resolved promise
+    // res.json() need to be returned, if not, it won't load the data
+    // properly.
+    return res.json();
+  })
+  
   .then((items) => {
+    console.log(items);
     items.forEach((item) => store.addItem(item));
     shoppingList.render();
   });
 
-api.getItems()
-  .then(res => res.json())
-  .then((items) => {
-    const item = items[1];
-    return api.updateItem(item.id, { name: 'foobar' });
-  })
-  .then(res => res.json())
-  .then(() => console.log('updated!'));
+// test code, obselete 
+// test api.updateitem() method 
 
+// api.getItems()
+//   .then(res => res.json())
+//   .then((items) => {
+//     const item = items[1];
+//     return api.updateItem(item.id, { name: 'foobar',checked:true });
+//   })
+//   .then(res => res.json())
+//   .then(() => console.log('updated!'));
+
+// test api.createItem() method 
 
 // api.createItem('pears')
 //   .then(res => res.json())

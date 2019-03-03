@@ -1,5 +1,5 @@
 'use strict';
-/* global Item, cuid */
+/* global Item, cuid api*/
 
 const store = (function(){
  
@@ -23,20 +23,26 @@ const store = (function(){
         this.items.push(name);
       }
       
+    
+    function findAndUpdate(id, newData){
+      const foundItem = this.items.find(item=>item.id===id);
+      // notice the arguments inside=> Object.assign(target,source);
+      Object.assign(foundItem,newData);
       
-   function findAndToggleChecked(id){
-      const foundItem =  this.findById(id);
-      foundItem.checked  = !foundItem.checked;    
-   }
+    }  
+  //  function findAndToggleChecked(id){
+  //     const foundItem =  this.findById(id);
+  //     foundItem.checked  = !foundItem.checked;    
+  //  }
      
-   function findAndUpdateName (id,newName){
-     try{
-      Item.validateName(newName);
-      this.findById(id).name = newName;       
-     }catch(error){
-      console.log('Cannot update name: {error.message}');
-     }
-   }
+  //  function findAndUpdateName (id,newName){
+  //    try{
+  //     Item.validateName(newName);
+  //     this.findById(id).name = newName;       
+  //    }catch(error){
+  //     console.log('Cannot update name: {error.message}');
+  //    }
+  //  }
 
 
   function findAndDelete(id){
@@ -59,8 +65,7 @@ const store = (function(){
     hideCheckedItems:hideCheckedItems,
     searchTerm:searchTerm,
     findById:findById,
-    findAndToggleChecked:findAndToggleChecked,
-    findAndUpdateName:findAndUpdateName,
+    findAndUpdate:findAndUpdate,
     addItem:addItem,
     findAndDelete:findAndDelete,
     toggleCheckFilter:toggleCheckFilter,
