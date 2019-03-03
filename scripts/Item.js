@@ -1,12 +1,15 @@
 'use strict';
-
+/* global Item, cuid */
+/* global store, cuid */
 
 const Item = (function(){
-  
+
   const Item = {};
   function validateName(name){
     if(!name){
       throw 'Name does not exist';
+
+
     }
   }
   function create(name){
