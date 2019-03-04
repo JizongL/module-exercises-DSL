@@ -12,27 +12,27 @@ $(document).ready(function() {
 
 
 
-
-  api.getItems()
-    .then(res => 
-    
-      // const item = store.items[0];
-      // console.log('current name: ' + item.name);
-      // store.findAndUpdate(item.id, { name: 'foobar' });
-      // console.log('new name: ',res.json());
-      // because there is additional terms inside this resolved promise
-      // res.json() need to be returned, if not, it won't load the data
-      // properly.
-      res.json()
-    )
+  // function addErrorToStoreAndRender(error){
+  //   store.error = error;
+  //   shoppingList.render();
+  // }
   
-    .then((items) => {
-      
-      items.forEach((item) => store.addItem(item));
-      console.log('test-index.js inside api.getItems',store.items);
-      $('.js-shopping-list').empty();
-      shoppingList.render();
-    });
+  api.getItems()
+    .then(data => shoppingList.addDataToStoreAndRender(data))
+    .catch(err => shoppingList.addErrorToStoreAndRender(err.message));
+    // .then(res => 
+    
+    //   // const item = store.items[0];
+    //   // console.log('current name: ' + item.name);
+    //   // store.findAndUpdate(item.id, { name: 'foobar' });
+    //   // console.log('new name: ',res.json());
+    //   // because there is additional terms inside this resolved promise
+    //   // res.json() need to be returned, if not, it won't load the data
+    //   // properly.
+    //   res.json()
+    // )
+  
+    
   
 });
 // test code, obselete 

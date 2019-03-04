@@ -37,7 +37,11 @@ button:hover {
   border: 1px solid grey;
   padding: 20px;
 }
-
+.display-error{
+  position:fixed;
+  font-size:25;
+  color:red;
+}
 .shopping-item {
   display: block;
   color: grey;

@@ -11,6 +11,7 @@ const store = (function(){
   ];
   const hideCheckedItems = false;
   const searchTerm= '';
+  const error ='';
   
   function findById(id){
       
@@ -31,8 +32,9 @@ const store = (function(){
     console.log('test findAndUpdate',newData,foundItem);
     Object.assign(foundItem,newData);
     console.log('after change',foundItem);
-    
-    //shoppingList.render();
+    // shoppingList.render() is important here, without calling it
+    // it would not update the checked status. 
+    shoppingList.render();
   }  
   //  function findAndToggleChecked(id){
   //     const foundItem =  this.findById(id);
@@ -52,6 +54,7 @@ const store = (function(){
   function findAndDelete(id){
     const index = store.items.findIndex(item => item.id === id);
     store.items.splice(index, 1);
+    shoppingList.render();
   } 
 
   function toggleCheckFilter(){  
@@ -64,7 +67,8 @@ const store = (function(){
 
 
 
-    return{
+  return{
+    error:error,
     items: items,
     hideCheckedItems:hideCheckedItems,
     searchTerm:searchTerm,

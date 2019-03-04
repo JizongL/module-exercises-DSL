@@ -38,6 +38,7 @@ const shoppingList = (function(){
 
   function render() {
     // Filter item list if store prop is true by item.checked === false
+    
     let items = store.items;
     if (store.hideCheckedItems) {
       items = store.items.filter(item => !item.checked);
@@ -46,6 +47,17 @@ const shoppingList = (function(){
     // Filter item list if store prop `searchTerm` is not empty
     if (store.searchTerm) {
       items = store.items.filter(item => item.name.includes(store.searchTerm));
+    }
+
+    // if there is error, print the arror to the page. 
+    if (store.error.length>0){
+      $('.display-error').html(`Error: ${store.error}`);
+    }else{
+      // the reason for adding the else cause is because
+      // when the Add item button is clicked, store.error is reset
+      // to '', then the render() is ran right after, then 
+      // here it check store.error.length =0, then it empty it. 
+      $('.display-error').empty();
     }
 
     // render the shopping list in the DOM
@@ -71,19 +83,36 @@ const shoppingList = (function(){
   //     alert("can't create");
   //   }
   // }
+  function addErrorToStoreAndRender(error){
+    console.log('test inside adderrortostore',error);
+    store.error = error;
+    shoppingList.render();
+  }
+
+  function addDataToStoreAndRender(items){
+    items.forEach((item) => store.addItem(item));
+    console.log('test-index.js inside api.getItems',store.items);
+    $('.js-shopping-list').empty();
+    shoppingList.render();
+  }
 
   function handleNewItemSubmit() {
     $('#js-shopping-list-form').submit(function (event) {
       event.preventDefault();
+      store.error = '';
+      render();
       const newItemName = $('.js-shopping-list-entry').val();
       $('.js-shopping-list-entry').val('');
       api.createItem(newItemName)
-        .then(res => res.json())
-        .then(newItem => {store.addItem(newItem);
-          render();
-        });
-      //addItemToShoppingList(newItemName);
-      //render();
+      // this will need to be deleted, because the listApiFetch() method
+      // from api module already called res.json(), it can't be called twice.   
+      //.then(res => res.json())
+        .then(newItem => store.addItem(newItem))  
+        .catch(err => 
+          addErrorToStoreAndRender(err.message));  
+        
+        
+          
     });
   }
 
@@ -115,9 +144,9 @@ const shoppingList = (function(){
       // is to replace the part of the item from the local store. 
       // check the usage of Object.assign() function guide. 
         .then(()=>store.findAndUpdate(id,{checked:!item.checked}));
+        
       
       
-      render();
     });
   }
 
@@ -146,27 +175,35 @@ const shoppingList = (function(){
     $('.js-shopping-list').on('click', '.js-item-delete', event => {
       // get the index of the item in store.items
       const id = getItemIdFromElement(event.currentTarget);
+      api.deleteItem(id)
+        .then(()=>store.findAndDelete(id));
       // delete the item
-      store.findAndDelete(id);
+      
       // render the updated shopping list
       render();
     });
   }
 
+
   function handleEditShoppingItemSubmit() {
     $('.js-shopping-list').on('submit', '.js-edit-item', event => {
       event.preventDefault();
+      store.error = '';
       const id = getItemIdFromElement(event.currentTarget);
       const itemName = $(event.currentTarget).find('.shopping-item').val();
       console.log('test id itemName',id,itemName);
       api.updateItem(id,{name:itemName})
-        .then(res => console.log(res.json()))
-        .then(()=>console.log('updated!'));
+        .then(()=>store.findAndUpdate(id, {name:itemName}))
+        .catch(err => 
+        { console.log('testing inside findandupdate catch',err.message);
+          addErrorToStoreAndRender(err.message);
+        }); 
+        
 
 
 
-      store.findAndUpdate(id, {name:itemName});
-      render();
+      
+      
     });
   }
 
@@ -186,6 +223,7 @@ const shoppingList = (function(){
   }
 
   function bindEventListeners() {
+    
     handleNewItemSubmit();
     handleItemCheckClicked();
     handleDeleteItemClicked();
@@ -197,6 +235,8 @@ const shoppingList = (function(){
   // This object contains the only exposed methods from this module:
   return {
     render: render,
+    addErrorToStoreAndRender:addErrorToStoreAndRender,
+    addDataToStoreAndRender:addDataToStoreAndRender,
     bindEventListeners: bindEventListeners,
   };
 }());
