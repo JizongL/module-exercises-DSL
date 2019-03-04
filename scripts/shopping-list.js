@@ -103,7 +103,20 @@ const shoppingList = (function(){
   function handleItemCheckClicked() {
     $('.js-shopping-list').on('click', '.js-item-toggle', event => {
       const id = getItemIdFromElement(event.currentTarget);
-      store.findAndToggleChecked(id);
+      let item = store.items.find(item => item.id===id);
+      
+      console.log('test item checked',!item.checked);
+      api.updateItem(id,{checked:!item.checked})
+      // remember here
+      // I spent a long time to debug this part earlier. 
+      // it turns out that I did not pass an object into
+      // findAndUpdate(), so the Ojbect.assign() from the store 
+      // module does not work properly. The purpose of the Object.assign()
+      // is to replace the part of the item from the local store. 
+      // check the usage of Object.assign() function guide. 
+        .then(()=>store.findAndUpdate(id,{checked:!item.checked}));
+      
+      
       render();
     });
   }
@@ -145,7 +158,14 @@ const shoppingList = (function(){
       event.preventDefault();
       const id = getItemIdFromElement(event.currentTarget);
       const itemName = $(event.currentTarget).find('.shopping-item').val();
-      store.findAndUpdateName(id, itemName);
+      console.log('test id itemName',id,itemName);
+      api.updateItem(id,{name:itemName})
+        .then(res => console.log(res.json()))
+        .then(()=>console.log('updated!'));
+
+
+
+      store.findAndUpdate(id, {name:itemName});
       render();
     });
   }

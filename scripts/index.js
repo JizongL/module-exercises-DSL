@@ -6,30 +6,35 @@
 
 $(document).ready(function() {
 
-  shoppingList.render();
+  //shoppingList.render();
   shoppingList.bindEventListeners();
-  shoppingList.render();
-});
+  //shoppingList.render();
 
-api.getItems()
-  .then(res => {
+
+
+
+  api.getItems()
+    .then(res => 
     
-    const item = store.items[0];
-    console.log('current name: ' + item.name);
-    store.findAndUpdate(item.id, { name: 'foobar' });
-    console.log('new name: ' + item.name);
-    // because there is additional terms inside this resolved promise
-    // res.json() need to be returned, if not, it won't load the data
-    // properly.
-    return res.json();
-  })
+      // const item = store.items[0];
+      // console.log('current name: ' + item.name);
+      // store.findAndUpdate(item.id, { name: 'foobar' });
+      // console.log('new name: ',res.json());
+      // because there is additional terms inside this resolved promise
+      // res.json() need to be returned, if not, it won't load the data
+      // properly.
+      res.json()
+    )
   
-  .then((items) => {
-    console.log(items);
-    items.forEach((item) => store.addItem(item));
-    shoppingList.render();
-  });
-
+    .then((items) => {
+      
+      items.forEach((item) => store.addItem(item));
+      console.log('test-index.js inside api.getItems',store.items);
+      $('.js-shopping-list').empty();
+      shoppingList.render();
+    });
+  
+});
 // test code, obselete 
 // test api.updateitem() method 
 
@@ -57,4 +62,3 @@ api.getItems()
 // api.getItems()
 //   .then(res=>res.json())
 //   .then(resJson=> console.log(resJson));
-

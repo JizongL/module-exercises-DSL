@@ -1,35 +1,39 @@
 'use strict';
-/* global Item, cuid api*/
+/* global Item, cuid shoppingList api*/
 
 const store = (function(){
  
-    const items= [
-      { id: cuid(), name: 'apples', checked: false },
-      { id: cuid(), name: 'oranges', checked: false },
-      { id: cuid(), name: 'milk', checked: true },
-      { id: cuid(), name: 'bread', checked: false }
-    ];
-    const hideCheckedItems = false;
-    const searchTerm= '';
+  const items= [
+    { id: cuid(), name: 'apples', checked: false },
+    { id: cuid(), name: 'oranges', checked: false },
+    { id: cuid(), name: 'milk', checked: true },
+    { id: cuid(), name: 'bread', checked: false }
+  ];
+  const hideCheckedItems = false;
+  const searchTerm= '';
   
-    function findById(id){
+  function findById(id){
       
-      return store.items.find( item => item.id===id);
-    }
+    return store.items.find( item => item.id===id);
+  }
 
-    function addItem(name){
+  function addItem(name){
         
-       // console.log('this is a test',items);
-        this.items.push(name);
-      }
+    // console.log('this is a test',items);
+    this.items.push(name);
+  }
       
     
-    function findAndUpdate(id, newData){
-      const foundItem = this.items.find(item=>item.id===id);
-      // notice the arguments inside=> Object.assign(target,source);
-      Object.assign(foundItem,newData);
-      
-    }  
+  function findAndUpdate(id, newData){
+    const foundItem = this.items.find(item=>item.id===id);
+    // notice the arguments inside=> Object.assign(target,source);
+    
+    console.log('test findAndUpdate',newData,foundItem);
+    Object.assign(foundItem,newData);
+    console.log('after change',foundItem);
+    
+    //shoppingList.render();
+  }  
   //  function findAndToggleChecked(id){
   //     const foundItem =  this.findById(id);
   //     foundItem.checked  = !foundItem.checked;    
